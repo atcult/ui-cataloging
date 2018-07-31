@@ -253,7 +253,7 @@ class AdvanceSearchForm extends
                         onClick={this.handleClick}
                         type="button"
                         buttonStyle="primary"
-                        buttonClass={css.largeBox}
+                        fullWidth
                       >
                       Reset
                       </Button>

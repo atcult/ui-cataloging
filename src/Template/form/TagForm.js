@@ -70,7 +70,7 @@ class TagForm extends React.Component {
           <Select dataOptions={[{ value: 'a', label: 'a' }]} />
           <Col xs={6}>
             <Field
-              className={css.largeField}
+              fullWidth
               name="firstArgs"
               id="firstArgs"
               withRef
@@ -89,7 +89,7 @@ class TagForm extends React.Component {
           <Select dataOptions={[{ value: 'a', label: 'a' }]} />
           <Col xs={6}>
             <Field
-              className={css.largeField}
+              fullWidth
               name="lang"
               id="lang"
               withRef
@@ -109,7 +109,7 @@ class TagForm extends React.Component {
             <Select dataOptions={[{ value: 'a', label: 'a' }]} />
             <Col xs={6}>
               <Field
-                className={css.largeField}
+                fullWidth
                 name={`${this.props.defaultValue.code}-${i}`}
                 id={`${this.props.defaultValue.code}-${i}`}
                 withRef
@@ -129,7 +129,6 @@ class TagForm extends React.Component {
           <Select dataOptions={[{ value: 'b', label: 'b' }, { value: 'c', label: 'c' }]} />
           <Col xs={6}>
             <Field
-              className={css.largeField}
               fullWidth
               name="langField"
               id="secondField"

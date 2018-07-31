@@ -61,7 +61,6 @@ class TemplateForm extends React.Component<TemplateFormProps, TemplateFormState>
         <Row id="section-name">
           <Col xs={6}>
             <Field
-              className={css.largeField}
               label={formatMsg({
                 id: 'ui-marccat.template.form.name',
               })}
@@ -84,7 +83,7 @@ class TemplateForm extends React.Component<TemplateFormProps, TemplateFormState>
               name="subGroup"
               component={RadioButtonGroup}
               label="Group"
-              className={css.colRadio}
+              fullWidth
             >
               <RadioButton
                 label="W"
