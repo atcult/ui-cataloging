@@ -39,6 +39,7 @@ class NavMenu extends React.Component<NavMenuProps, NavMenuSatate> {
 
 
   render() {
+    const { formatMessage } = this.props.stripes.intl;
     const rootPath = this.props.match.path;
     return (
       <div>
@@ -50,40 +51,40 @@ class NavMenu extends React.Component<NavMenuProps, NavMenuSatate> {
             <NavItem
               {...this.props}
               accordionId="expandeCollapseAction"
-              label="Simple Search"
+              label={formatMessage({ id: 'ui-marccat.navigator.simpleSearch' })}
               activeLink={`${rootPath}`}
               open={this.state.section.expandeCollapseAction}
-              itemLabel="Simple Search"
+              itemLabel={formatMessage({ id: 'ui-marccat.navigator.simpleSearch' })}
               path={`${rootPath}/externalSearch`}
             />
             <NavItem
               accordionId="advancedSearchSection"
               withChildren
               open={this.state.section.expandeCollapseAction}
-              label="Advanced Search"
+              label={formatMessage({ id: 'ui-marccat.navigator.advancedSearch' })}
               path={`${rootPath}/advancedSearch`}
             ><AdvanceSearchForm {...this.props} />
             </NavItem>
             <NavItem
               accordionId="externalSearchSection"
-              label="External Search"
+              label={formatMessage({ id: 'ui-marccat.navigator.externalSearch' })}
               open={this.state.section.expandeCollapseAction}
-              itemLabel="External Search"
+              itemLabel={formatMessage({ id: 'ui-marccat.navigator.externalSearch' })}
               activeLink={`${rootPath}/`}
               path={`${rootPath}/externalSearch`}
             />
             <NavItem
               accordionId="indexesSection"
-              label="Indexes"
-              itemLabel="Indexes"
+              label={formatMessage({ id: 'ui-marccat.navigator.indexes' })}
+              itemLabel={formatMessage({ id: 'ui-marccat.navigator.indexes' })}
               open={this.state.section.expandeCollapseAction}
               activeLink={`${rootPath}/`}
               path={`${rootPath}/indexList`}
             />
             <NavItem
               accordionId="diacriticSection"
-              label="Diacritic"
-              itemLabel="Diacritic List"
+              label={formatMessage({ id: 'ui-marccat.navigator.diacritic' })}
+              itemLabel={formatMessage({ id: 'ui-marccat.navigator.diacriticList' })}
               open={this.state.section.expandeCollapseAction}
               activeLink={`${rootPath}/`}
               path={`${rootPath}/diacritic`}
@@ -92,18 +93,18 @@ class NavMenu extends React.Component<NavMenuProps, NavMenuSatate> {
             </NavItem>
             <NavItem
               accordionId="reportSection"
-              label="Report"
-              itemLabel="Report"
+              label={formatMessage({ id: 'ui-marccat.navigator.report' })}
+              itemLabel={formatMessage({ id: 'ui-marccat.navigator.report' })}
               open={this.state.section.expandeCollapseAction}
               activeLink={`${rootPath}/`}
               path={`${rootPath}/report`}
             />
             <NavItem
               accordionId="templateSection"
-              label="Template"
+              label={formatMessage({ id: 'ui-marccat.navigator.template' })}
               open={this.state.section.expandeCollapseAction}
               activeLink={`${rootPath}/`}
-              itemLabel="Template List"
+              itemLabel={formatMessage({ id: 'ui-marccat.navigator.templateList' })}
               path={`${rootPath}/templateList`}
             />
           </NavList>

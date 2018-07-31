@@ -72,7 +72,7 @@ class CreateTemplate extends React.Component<CreateTemplateProps, CreateTemplate
       },
       {
         label: formatMsg({
-          id: 'ui-catalmarccatoging.button.backto',
+          id: 'ui-marccat.button.backto',
         }),
         onClick: () => {
           this.props.history.push(C.INTERNAL_URL.VIEW_TEMPLATE);

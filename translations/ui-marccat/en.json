@@ -15,9 +15,13 @@
   "navigator.search": "Search",
   "navigator.simpleSearch": "Simple search",
   "navigator.advancedSearch": "Advanced search",
+  "navigator.indexes":"Indexes",
+  "navigator.diacritic":"Diacritic",
+  "navigator.diacriticList":"Diacritic List",
   "navigator.externalSearch": "External search",
   "navigator.reportistics": "Reporting",
   "navigator.report": "Report",
+  "navigator.db":"Database",
 
   "button.new": "+ New",
   "button.close": "Close",
@@ -79,6 +83,10 @@
 
   "search.wrong.input":"Wrong input on search field",
 
+  "result.for":"Results for:",
+  "result.found":"Results Found",
+  "noResult.for":"No Result Found for ",
+
   "indexes.title":"INDEX GUIDE",
   "indexes.main.title":"Main Indexes",
   "indexes.secondary.title":"Secondary Indexes",
@@ -91,5 +99,7 @@
   "diacritic.list.character":"Character",
   "diacritic.list.description":"Description",
   "diacritic.list.charset":"Character Set",
-  "diacritic.list.unicode":"Unicode"
+  "diacritic.list.unicode":"Unicode",
+  "diacritic.textarea":"Type a word...",
+  "diacritic.copy":"Select a row..."
 }

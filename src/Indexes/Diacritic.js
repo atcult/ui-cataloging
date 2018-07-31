@@ -47,7 +47,7 @@ class Diacritic extends Component<DiacriticProps, DiacriticState> {
         <form name="diacriticForm" id="diacriticForm" onSubmit={this.handleSubmit}>
           <Row>
             <Col xs={12}>
-              <Field className={css.SearchTextArea} placeholder="Type a word..." rows="2" name="search_textarea_diacritic" id="search_textarea_diacritic" component="textarea" />
+              <Field className={css.SearchTextArea} placeholder={formatMsg({ id: 'ui-marccat.diacritic.textarea' })} rows="2" name="search_textarea_diacritic" id="search_textarea_diacritic" component="textarea" />
             </Col>
             <Col xs={12} className={css.CustomColButtons}>
               <SearchButton {...this.props} />
@@ -72,7 +72,7 @@ class Diacritic extends Component<DiacriticProps, DiacriticState> {
                 name="charCopied"
                 component="input"
                 type="text"
-                placeholder="Select a row..."
+                placeholder={formatMsg({ id: 'ui-marccat.diacritic.copy' })}
                 value={this.state.charCopied}
               />
             </Col>

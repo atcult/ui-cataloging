@@ -7,7 +7,6 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import Button from '@folio/stripes-components/lib/Button';
 import Select from '@folio/stripes-components/lib/Select';
 import { TagSelect } from '../';
-import css from '../styles/Template.css';
 import * as C from '../../Utils/';
 
 class TagForm extends React.Component {

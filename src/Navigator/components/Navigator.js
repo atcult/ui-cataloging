@@ -34,7 +34,7 @@ class Navigator extends React.Component<NavigatorProps, NavigatorState> {
             })}
             appIcon={{ app: 'marccat' }}
           >
-            <LogicalView {...this.props} label="Database" />
+            <LogicalView {...this.props} label={formatMessage({ id: 'ui-marccat.navigator.db' })} />
             <NavMenu {...this.props} />
           </Pane>
           {this.props.children}

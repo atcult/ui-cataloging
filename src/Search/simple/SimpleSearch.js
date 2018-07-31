@@ -60,7 +60,9 @@ class SimpleSearch extends React.Component<*, *> {
           actionMenuItems={actionMenuItems}
           lastMenu={lastMenu}
           defaultWidth="fill"
-          paneSub="search result"
+          paneSub={formatMsg({
+            id: 'ui-marccat.navigator.search.result',
+          })}
           appIcon={{ app: C.META.ICON_TITLE }}
           paneTitle={formatMsg({
             id: 'ui-marccat.navigator.simpleSearch',

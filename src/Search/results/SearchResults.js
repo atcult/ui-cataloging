@@ -24,7 +24,7 @@ class SearchResults extends React.Component<SearchResultsProps, SearchResultsSta
           paneTitle={formatMsg({
             id: 'ui-marccat.search.result',
           })}
-          paneSub="6 Result found"
+          paneSub={formatMsg({ id: 'ui-marccat.result.found' })}
           appIcon={{ app: 'marccat' }}
         >
           <MultiColumnList

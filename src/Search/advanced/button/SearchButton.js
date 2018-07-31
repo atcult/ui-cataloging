@@ -15,6 +15,7 @@ type Props = {
   disabled: boolean;
   mutator: Object;
   data: string;
+  stripes: Object;
 };
 
 type State = {
@@ -46,6 +47,7 @@ class SearchButton extends React.Component<Props, State> {
 
   render() {
     const { isOpen } = this.state;
+    const { formatMessage } = this.props.stripes.intl;
     return (
       <div>
         <Button
@@ -58,8 +60,8 @@ class SearchButton extends React.Component<Props, State> {
           <FormattedMessage id="ui-marccat.search.searchButton" />
         </Button>
         {this.state.results &&
-        <Modal dismissible closeOnBackgroundClick onClose={this.handleClose} open={isOpen} label={`Results for: ${this.props.data}`}>
-          <div>{this.state.results ? this.state.results[0].data : 'No Result Found for ' + this.props.data}</div>
+        <Modal dismissible closeOnBackgroundClick onClose={this.handleClose} open={isOpen} label={formatMessage({ id: 'ui-marccat.result.for' })`${this.props.data}`}>
+          <div>{this.state.results ? this.state.results[0].data : formatMessage({ id: 'ui-marccat.noResult.for' }) + this.props.data}</div>
         </Modal>
         }
       </div>
