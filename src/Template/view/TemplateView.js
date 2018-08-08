@@ -18,6 +18,7 @@ import { removeById } from '../../Utils/Formatter';
 import * as C from '../../Utils';
 import css from '../styles/Template.css';
 
+
 class TemplateView extends React.Component {
   static manifest = Object.freeze({
     currentTemplate: {},
@@ -91,8 +92,9 @@ class TemplateView extends React.Component {
       }),
       currentType: PropTypes.string
     }).isRequired,
-    history: PropTypes.object,
+    router: PropTypes.object,
     resources: PropTypes.object,
+    history: PropTypes.object
   };
 
 
@@ -134,18 +136,17 @@ class TemplateView extends React.Component {
   }
 
   handleClose() {
-    this.setState(curState => {
-      const newState = _.cloneDeep(curState);
-      newState.showTemplateDetail = !this.state.showTemplateDetail;
-      return newState;
+    this.props.history.goBack();
+    this.setState({
+      showTemplateDetail: false
     });
   }
 
   handleRowClick=(c, object) => {
     this.props.mutator.templateDetails.reset();
     this.props.mutator.query.replace(object.id);
+    this.props.router.push(`templateList/${object.id}`);
     Observable.from(this.props.mutator.templateDetails.GET());
-    this.props.history.push(`/marccat/templateList/${object.id}`);
     this.setState({
       showTemplateDetail: true,
       selectedTemplate: object,
@@ -153,7 +154,7 @@ class TemplateView extends React.Component {
   }
 
   handleAddTemplate() {
-    this.props.history.push(C.INTERNAL_URL.ADD_TEMPLATE);
+    this.props.router.push(C.INTERNAL_URL.ADD_TEMPLATE);
   }
 
   render() {
@@ -199,17 +200,6 @@ class TemplateView extends React.Component {
       </PaneMenu>
     );
 
-    const actionMenuItems = [
-      {
-        label: formatMsg({
-          id: 'ui-marccat.template.create',
-        }),
-        onClick: () => {
-          this.props.history.push(C.INTERNAL_URL.ADD_TEMPLATE);
-        },
-      },
-    ];
-
     const actionMenuItemsDetail = [
       {
         label: formatMsg({
@@ -241,7 +231,6 @@ class TemplateView extends React.Component {
       <Paneset static>
         <Pane
           defaultWidth="fill"
-          actionMenuItems={actionMenuItems}
           firstMenu={searchMenu}
           lastMenu={lastMenu}
           paneTitle={formatMsg({
