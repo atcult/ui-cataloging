@@ -6,16 +6,20 @@ import React from 'react';
 import _ from 'lodash';
 import { reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
-import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
-import { ExpandAllButton } from '@folio/stripes-components/lib/Accordion';
 import EditTemplateInfo from './section/EditTemplateInfo';
-import EditTemplateTag from './section/EditTemplateTag';
 import * as C from '../../Utils';
+import TemplateDetailTag from './section/TemplateDetailTag';
+import Paneset from '../../../node_modules/@folio/stripes-components/lib/Paneset';
+import Pane from '../../../node_modules/@folio/stripes-components/lib/Pane';
+import TemplateView from '../view/TemplateView';
+import PaneMenu from '../../../node_modules/@folio/stripes-components/lib/PaneMenu';
+import IconButton from '../../../node_modules/@folio/stripes-components/lib/IconButton';
 
 class EditTemplate extends React.Component {
   static propTypes = {
     selectedTemplate: PropTypes.object.isRequired,
-    mutator: PropTypes.object
+    mutator: PropTypes.object,
+    history: PropTypes.object
   };
 
   static manifest = Object.freeze({
@@ -36,28 +40,21 @@ class EditTemplate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      section: {
-        editTemplateInfo: false,
-        editTemplateTag: false,
-      },
+      showEditTemplate: false,
     };
-    this.handleExpandAll = this.handleExpandAll.bind(this);
-    this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
-  handleExpandAll(section) {
-    this.setState({ section });
-  }
-
-  handleSectionToggle({ id }) {
+  handleClose() {
     this.setState(curState => {
       const newState = _.cloneDeep(curState);
-      newState.section[id] = !newState.section[id];
+      newState.showEditTemplate = !this.state.showEditTemplate;
       return newState;
     });
+    this.props.history.push(C.INTERNAL_URL.VIEW_TEMPLATE);
   }
 
-  handleButtonClick = () => {};
+  handleButtonClick = () => { };
 
   handleEditTemplate = () => {
     const settings = {
@@ -68,31 +65,39 @@ class EditTemplate extends React.Component {
   };
 
   render() {
-    const { section } = this.state;
-    return (
-      <div>
-        <form id="editTemplateForm" name="editTemplateForm">
-          <Row end="xs">
-            <Col xs>
-              <ExpandAllButton accordionStatus={section} onToggle={this.handleExpandAll} />
-            </Col>
-          </Row>
-          <EditTemplateInfo
-            {...this.props}
-            accordionId="editTemplateInfo"
-            expanded={section.editTemplateInfo}
-            selectedTemplate={this.props.selectedTemplate}
-            onToggle={this.handleSectionToggle}
-          />
-        </form>
-        <EditTemplateTag
-          {...this.props}
-          accordionId="editTemplateTag"
-          expanded={section.editTemplateTag}
-          onToggle={this.handleSectionToggle}
-        />
-      </div>
+    const saveIcon = (
+      <PaneMenu>
+        <IconButton key="icon-save" icon="save" />
+      </PaneMenu>
     );
+    if (this.state.showEditTemplate) {
+      return <TemplateView {...this.props} />;
+    } else {
+      return (
+        <Paneset static>
+          <Pane
+            fullWidth
+            paneTitle={this.props.selectedTemplate.name}
+            paneSub={`Id ${this.props.selectedTemplate.id}`}
+            appIcon={{ app: C.META.ICON_TITLE }}
+            dismissible
+            onClose={this.handleClose}
+            lastMenu={saveIcon}
+          >
+            <form id="editTemplateForm" name="editTemplateForm">
+              <EditTemplateInfo
+                {...this.props}
+                selectedTemplate={this.props.selectedTemplate}
+              />
+              <TemplateDetailTag
+                {...this.props}
+                selectedTemplate={this.props.selectedTemplate}
+              />
+            </form>
+          </Pane>
+        </Paneset>
+      );
+    }
   }
 }
 

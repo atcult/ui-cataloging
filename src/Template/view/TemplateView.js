@@ -17,6 +17,7 @@ import { ToolbarButtonMenu } from '../../Core';
 import { removeById } from '../../Utils/Formatter';
 import * as C from '../../Utils';
 import css from '../styles/Template.css';
+import TemplateDetailTag from '../edit/section/TemplateDetailTag';
 
 
 class TemplateView extends React.Component {
@@ -57,6 +58,7 @@ class TemplateView extends React.Component {
     this.state = {
       confirming: false,
       showTemplateDetail: false,
+      goToEditForm: false,
       selectedTemplate: {},
     };
     this.props.mutator.currentType.replace('B');
@@ -67,6 +69,7 @@ class TemplateView extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.onDelete = this.onDelete.bind(this);
     this.showConfirm = this.showConfirm.bind(this);
+    this.showEditForm = this.showEditForm.bind(this);
     this.hideConfirm = this.hideConfirm.bind(this);
     this.callout = null;
   }
@@ -80,6 +83,7 @@ class TemplateView extends React.Component {
         update: PropTypes.func,
       }),
       recordsTemplates: PropTypes.shape({
+        reset: PropTypes.func,
         POST: PropTypes.func,
         PUT: PropTypes.func,
         DELETE: PropTypes.func,
@@ -126,6 +130,11 @@ class TemplateView extends React.Component {
     return this.deletPromise;
   }
 
+  showEditForm() {
+    this.props.router.push(C.INTERNAL_URL.EDIT_TEMPLATE.replace(':id', this.state.selectedTemplate.id));
+    this.setState({ goToEditForm: true });
+  }
+
   showCalloutMessage() {
     const message = (
       <span>
@@ -133,21 +142,24 @@ class TemplateView extends React.Component {
       </span>
     );
     this.callout.sendCallout({ message });
+    this.handleClose();
   }
 
   handleClose() {
-    this.props.history.goBack();
-    this.setState({
-      showTemplateDetail: false
+    this.setState(curState => {
+      const newState = _.cloneDeep(curState);
+      newState.showTemplateDetail = !this.state.showTemplateDetail;
+      return newState;
     });
   }
 
-  handleRowClick=(c, object) => {
+  handleRowClick = (c, object) => {
     this.props.mutator.templateDetails.reset();
     this.props.mutator.query.replace(object.id);
-    this.props.router.push(`templateList/${object.id}`);
+    this.props.router.push(C.INTERNAL_URL.DETAIL_TEMPLATE.replace(':id', object.id));
     Observable.from(this.props.mutator.templateDetails.GET());
     this.setState({
+      goToEditForm: false,
       showTemplateDetail: true,
       selectedTemplate: object,
     });
@@ -196,7 +208,7 @@ class TemplateView extends React.Component {
         />
 
         <IconButton key="icon-save" icon="save" />
-        <IconButton key="icon-edit" icon="edit" />
+        <IconButton key="icon-edit" icon="edit" onClick={this.showEditForm} />
       </PaneMenu>
     );
 
@@ -226,63 +238,71 @@ class TemplateView extends React.Component {
       className={css.mr15}
       onClick={() => this.props.history.push(C.INTERNAL_URL.ADD_TEMPLATE)}
     />;
-
-    return (
-      <Paneset static>
-        <Pane
-          defaultWidth="fill"
-          firstMenu={searchMenu}
-          lastMenu={lastMenu}
-          paneTitle={formatMsg({
-            id: 'ui-marccat.templates.title',
-          })}
-          paneSub={templates.length + ' Result found'}
-          appIcon={{ app: C.META.ICON_TITLE }}
-        >
-          <MultiColumnList
-            id="list-templates"
-            loading={!recordsTemplates.hasLoaded}
-            contentData={templates}
-            rowMetadata={['id', 'id']}
-            formatter={formatter}
-            ariaLabel="TemplateView"
-            visibleColumns={['id', 'name']}
-            sortedColumn="name"
-            sortOrder="ascending"
-            onRowClick={this.handleRowClick}
-            containerRef={ref => {
-              this.resultsList = ref;
-            }}
-          />
-        </Pane>
-        {this.state.showTemplateDetail && (
+    if (this.state.goToEditForm) {
+      return (
+        <this.connectedEditTemplateView
+          {...this.props}
+          selectedTemplate={this.state.selectedTemplate}
+        />
+      );
+    } else {
+      return (
+        <Paneset static>
           <Pane
             defaultWidth="fill"
-            paneTitle={this.state.selectedTemplate.name}
-            paneSub={`Id ${this.state.selectedTemplate.id}`}
+            firstMenu={searchMenu}
+            lastMenu={lastMenu}
+            paneTitle={formatMsg({
+              id: 'ui-marccat.templates.title',
+            })}
+            paneSub={templates.length + ' Result found'}
             appIcon={{ app: C.META.ICON_TITLE }}
-            dismissible
-            onClose={this.handleClose}
-            actionMenuItems={actionMenuItemsDetail}
-            lastMenu={deleteMenu}
           >
-            <this.connectedEditTemplateView
-              {...this.props}
-              selectedTemplate={this.state.selectedTemplate}
+            <MultiColumnList
+              id="list-templates"
+              loading={!recordsTemplates.hasLoaded}
+              contentData={templates}
+              rowMetadata={['id', 'id']}
+              formatter={formatter}
+              ariaLabel="TemplateView"
+              visibleColumns={['id', 'name']}
+              sortedColumn="name"
+              sortOrder="ascending"
+              onRowClick={this.handleRowClick}
+              containerRef={ref => {
+                this.resultsList = ref;
+              }}
             />
-            <ConfirmationModal
-              open={this.state.confirming}
-              heading={modalHeading}
-              message={modalMessage}
-              onConfirm={this.onDelete}
-              onCancel={this.hideConfirm}
-              confirmLabel={confirmLabel}
-            />
-            <Callout ref={(ref) => { this.callout = ref; }} />
           </Pane>
-        )}
-      </Paneset>
-    );
+          {this.state.showTemplateDetail && (
+            <Pane
+              defaultWidth="fill"
+              paneTitle={this.state.selectedTemplate.name}
+              paneSub={`Id ${this.state.selectedTemplate.id}`}
+              appIcon={{ app: C.META.ICON_TITLE }}
+              dismissible
+              onClose={this.handleClose}
+              actionMenuItems={actionMenuItemsDetail}
+              lastMenu={deleteMenu}
+            >
+              <TemplateDetailTag
+                {...this.props}
+                selectedTemplate={this.state.selectedTemplate}
+              />
+              <ConfirmationModal
+                open={this.state.confirming}
+                heading={modalHeading}
+                message={modalMessage}
+                onConfirm={this.onDelete}
+                onCancel={this.hideConfirm}
+                confirmLabel={confirmLabel}
+              />
+              <Callout ref={(ref) => { this.callout = ref; }} />
+            </Pane>
+          )}
+        </Paneset>
+      );
+    }
   }
 }
 

@@ -37,6 +37,10 @@
   "template.tag.delete": "Delete",
   "template.add.subfield": "Add subfield",
 
+  "template.list.code":"Code",
+  "template.list.description":"Description",
+  "template.list.displayValue":"Value",
+
   "template.form.name": "Name",
   "template.form.tag.code": "Tag",
   "template.form.tag.ind1": "Ind2",
