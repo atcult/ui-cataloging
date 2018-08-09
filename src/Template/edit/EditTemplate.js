@@ -14,6 +14,8 @@ import Pane from '../../../node_modules/@folio/stripes-components/lib/Pane';
 import TemplateView from '../view/TemplateView';
 import PaneMenu from '../../../node_modules/@folio/stripes-components/lib/PaneMenu';
 import IconButton from '../../../node_modules/@folio/stripes-components/lib/IconButton';
+import { Row, Col } from '../../../node_modules/react-flexbox-grid';
+import { ExpandAllButton } from '../../../node_modules/@folio/stripes-components/lib/Accordion';
 
 class EditTemplate extends React.Component {
   static propTypes = {
@@ -40,9 +42,27 @@ class EditTemplate extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      section: {
+        editTemplateInfo: false,
+        templateDetailTag: false,
+      },
       showEditTemplate: false,
     };
     this.handleClose = this.handleClose.bind(this);
+    this.handleExpandAll = this.handleExpandAll.bind(this);
+    this.handleSectionToggle = this.handleSectionToggle.bind(this);
+  }
+
+  handleExpandAll(section) {
+    this.setState({ section });
+  }
+
+  handleSectionToggle({ id }) {
+    this.setState(curState => {
+      const newState = _.cloneDeep(curState);
+      newState.section[id] = !newState.section[id];
+      return newState;
+    });
   }
 
   handleClose() {
@@ -65,6 +85,7 @@ class EditTemplate extends React.Component {
   };
 
   render() {
+    const { section } = this.state;
     const saveIcon = (
       <PaneMenu>
         <IconButton key="icon-save" icon="save" />
@@ -85,13 +106,24 @@ class EditTemplate extends React.Component {
             lastMenu={saveIcon}
           >
             <form id="editTemplateForm" name="editTemplateForm">
+              <Row end="xs">
+                <Col xs>
+                  <ExpandAllButton accordionStatus={section} onToggle={this.handleExpandAll} />
+                </Col>
+              </Row>
               <EditTemplateInfo
                 {...this.props}
                 selectedTemplate={this.props.selectedTemplate}
+                accordionId="editTemplateInfo"
+                expanded={section.editTemplateInfo}
+                onToggle={this.handleSectionToggle}
               />
               <TemplateDetailTag
                 {...this.props}
                 selectedTemplate={this.props.selectedTemplate}
+                accordionId="templateDetailTag"
+                expanded={section.templateDetailTag}
+                onToggle={this.handleSectionToggle}
               />
             </form>
           </Pane>

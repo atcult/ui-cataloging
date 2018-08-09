@@ -9,9 +9,13 @@ import { Row, Col } from '@folio/stripes-components/lib/LayoutGrid';
 import { connect } from '@folio/stripes-connect';
 import * as C from '../../../Utils';
 import { remapTemplateView } from '../../../Utils/Mapper';
+import { Accordion } from '../../../../node_modules/@folio/stripes-components/lib/Accordion';
 
 class TemplateDetailTag extends React.Component {
   static propTypes = {
+    onToggle: PropTypes.object.isRequired,
+    accordionId: PropTypes.object.isRequired,
+    expanded: PropTypes.object.isRequired,
     resources: PropTypes.object,
     // selectedTemplate: PropTypes.object
   };
@@ -28,6 +32,7 @@ class TemplateDetailTag extends React.Component {
 
   render() {
     const formatMsg = this.props.stripes.intl.formatMessage;
+    const { expanded, onToggle, accordionId } = this.props;
     const {
       resources: { details },
     } = this.props; // eslint-disable-line react/prop-types
@@ -41,21 +46,31 @@ class TemplateDetailTag extends React.Component {
       displayValue: formatMsg({ id: 'ui-marccat.template.list.displayValue' }),
     };
     return (
-      <Row>
-        <Col xs={12}>
-          <MultiColumnList
-            contentData={resultTemplateView}
-            onRowClick={() => { }}
-            visibleColumns={[
-              'code',
-              'description',
-              'displayValue',
-            ]}
-            columnMapping={columnMapping}
-            columnWidths={{ code: '30%', description: '35%', displayValue: '35%' }}
-          />
-        </Col>
-      </Row>
+      <Accordion
+        label={formatMsg({
+          id:
+            'ui-marccat.template.detail.information.details',
+        })}
+        open={expanded}
+        id={accordionId}
+        onToggle={onToggle}
+      >
+        <Row>
+          <Col xs={12}>
+            <MultiColumnList
+              contentData={resultTemplateView}
+              onRowClick={() => { }}
+              visibleColumns={[
+                'code',
+                'description',
+                'displayValue',
+              ]}
+              columnMapping={columnMapping}
+              columnWidths={{ code: '30%', description: '35%', displayValue: '35%' }}
+            />
+          </Col>
+        </Row>
+      </Accordion>
     );
   }
 }
