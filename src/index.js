@@ -3,16 +3,14 @@
  * @flow
  */
 import * as React from 'react';
-import { Settings } from './Settings';
 import Router from './router';
-import { reducer, epics } from './Redux';
-import { injectCommonProp } from './Core';
-import * as C from './Utils';
+import { Settings } from './settings';
+import { reducer, epics } from './redux';
+import { injectCommonProp } from './core';
+import * as C from './utils';
 import MARCcat from './App';
 
-import './Theme/override.css';
-
-type RoutingProps = {
+type P = {
   root: {
     addReducer: Function,
     addEpic: Function,
@@ -20,7 +18,7 @@ type RoutingProps = {
   showSettings: boolean,
 };
 
-class MARCCatRouting extends React.Component<RoutingProps, {}> {
+class MARCCatRouting extends React.Component<P, {}> {
   constructor(props, context) {
     super(props, context);
     /*

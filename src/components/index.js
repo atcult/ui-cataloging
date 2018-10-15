@@ -3,7 +3,7 @@
  * @flow
  */
 import * as React from 'react';
-import { injectCommonProp } from '../Core';
+import { injectCommonProp } from '../../Core';
 import Navigator from '../Nav';
 import type Props from '../Core/type/props';
 
