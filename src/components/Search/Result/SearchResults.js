@@ -7,11 +7,9 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import * as C from '../../../Utils/Constant';
 import { ActionTypes } from '../../../Redux/actions';
 import { Props } from '../../../Core';
-import { actionMenuItem, ToolbarButtonMenu, ToolbarMenu, EmptyMessage, DotLoader } from '../../lib';
-import css from '../../Search/Search.css';
+import { actionMenuItem, ToolbarButtonMenu, EmptyMessage, DotLoader } from '../../lib';
 import { remapForResultList, getFieldPosition } from '../../../Utils/Mapper';
 import RowDetails from './RowDetails';
-
 import style from '../Search.css';
 
 type P = Props & {
