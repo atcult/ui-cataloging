@@ -3,14 +3,13 @@
  * @flow
  */
 import * as React from 'react';
-import { Settings } from './Settings';
-import Router from './router';
-import { reducer, epics } from './Redux';
-import { injectCommonProp } from './Core';
-import * as C from './Utils';
-import MARCcat from './App';
+import { Settings } from './settings';
+import { reducer, epics } from './redux';
+import { injectCommonProp } from './core';
+import * as C from './utils';
+import MARCcat from './components/MARCcat';
 
-import './Theme/override.css';
+import './index.css';
 
 type RoutingProps = {
   root: {
@@ -18,6 +17,7 @@ type RoutingProps = {
     addEpic: Function,
   },
   showSettings: boolean,
+  children: React.ReactNode
 };
 
 class MARCCatRouting extends React.Component<RoutingProps, {}> {
@@ -40,7 +40,7 @@ class MARCCatRouting extends React.Component<RoutingProps, {}> {
     }
     return (
       <MARCcat {...this.props}>
-        <Router {...this.props} />
+        {this.props.children}
       </MARCcat>
     );
   }
