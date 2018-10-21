@@ -1,6 +1,15 @@
 import { ActionTypes } from '../actions/Actions';
 
 const isLoading = false;
+const isLoadingDetail = false;
+
+const filter = {
+  recordType: undefined,
+  suppressed: undefined,
+  language: undefined,
+  format: undefined
+};
+
 
 export function searchEngineReducer(state = { isLoading }, action) {
   switch (action.type) {
@@ -26,25 +35,26 @@ export function searchEngineReducer(state = { isLoading }, action) {
   }
 }
 
-export function getDetailsRecord(state = { isLoading }, action) {
+// TOBE REMOVED
+export function getDetailsRecord(state = { isLoadingDetail }, action) {
   switch (action.type) {
   case ActionTypes.DETAILS:
     return {
       ...state,
-      isLoading: false,
+      isLoadingDetail: false,
       query: action.payload
     };
-  case ActionTypes.FETCH_REQUESTED:
+  case ActionTypes.FETCH_DETAIL_REQUESTED:
     return {
       ...state,
       records: action.payload,
-      isLoading: true
+      isLoadingDetail: true
     };
   case ActionTypes.DETAILS_BY_TITLE:
     return {
       ...state,
       records: action.payload,
-      isLoading: false
+      isLoadingDetail: false
     };
   default:
     return state;
@@ -68,3 +78,16 @@ export function scanBrowsingReducer(state = { isLoading }, action) {
     return state;
   }
 }
+
+export function filterReducer(state = { filter }, action) {
+  switch (action.type) {
+  case ActionTypes.LANGUAGES:
+    return {
+      ...state,
+      lang: action.lang,
+    };
+  default:
+    return state;
+  }
+}
+

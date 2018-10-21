@@ -1,5 +1,4 @@
 import { ActionTypes } from './Actions';
-import LogicalViews from '../models/LogicalViews';
 
 export const fetchLogicalViewAction = () => ({
   type: ActionTypes.FETCH_LOGICAL_VIEWS,
@@ -19,6 +18,10 @@ export const fetchRequested = (isLoading) => ({
   type: ActionTypes.FETCH_REQUESTED,
   payload: isLoading
 });
+export const fetchRequestedDetail = (isLoadingDetail) => ({
+  type: ActionTypes.FETCH_DETAIL_REQUESTED,
+  payload: isLoadingDetail
+});
 export const fetchSearchEngineRecords = (records) => ({
   type: ActionTypes.RECORD_SUCCESS,
   payload: records
@@ -28,7 +31,10 @@ export const fetchFailure = (message) => ({
   payload: message
 });
 
-
+export const setLang = (lang) => ({
+  type: ActionTypes.LANGUAGES,
+  payload: lang
+});
 /**
  * Action creator for querying a set of records
  * @param {String} type - resource type
