@@ -2,16 +2,16 @@ import React from 'react';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import AppIcon from '@folio/stripes-components/lib/AppIcon';
+import Icon from '@folio/stripes-components/lib/Icon';
 import Pane from '@folio/stripes-components/lib/Pane';
 import Paneset from '@folio/stripes-components/lib/Paneset';
-import * as C from '../../../Utils/Constant';
-import { ActionTypes } from '../../../Redux/actions';
-import { Props } from '../../../Core';
-import { actionMenuItem, ToolbarButtonMenu, ToolbarMenu, EmptyMessage, DotLoader } from '../../lib';
-import css from '../../Search/Search.css';
-import { remapForResultList, getFieldPosition } from '../../../Utils/Mapper';
-import RowDetails from './RowDetails';
+import * as C from '../../../utils/Constant';
+import { ActionTypes } from '../../../redux/actions';
+import { Props } from '../../../core';
+import { actionMenuItem, ToolbarButtonMenu, ToolbarMenu, EmptyMessage } from '../../lib';
+import { remapForResultList } from '../../../utils/Mapper';
+import { resultsFormatter, columnMapper } from '../../../utils/Formatter';
+import RecordDetails from './RecordDetails';
 
 type P = Props & {
     headings: Array<any>,
@@ -21,7 +21,6 @@ type P = Props & {
     dataLoaded: boolean,
 }
 
-
 export class SearchResults extends React.Component<P, {}> {
   constructor(props:P) {
     super(props);
@@ -30,7 +29,6 @@ export class SearchResults extends React.Component<P, {}> {
     };
     this.handleDeatils = this.handleDeatils.bind(this);
   }
-
 
   handleDeatils = (e) => {
     const { store } = this.props;
@@ -42,136 +40,84 @@ export class SearchResults extends React.Component<P, {}> {
   };
 
   render() {
-    const rightButton = {
-      marginRight: '10px',
-      float: 'right',
-    };
     const { detailPanelIsVisible } = this.state;
-
+    const { fetching, headings, fetchingDetail } = this.props;
     const actionMenuItems = actionMenuItem(['ui-marccat.indexes.title', 'ui-marccat.diacritic.title']);
-    const rightMenu = <ToolbarButtonMenu create {...this.props} label="ui-marccat.search.record.new.keyboard" style={rightButton} />;
-    const rightMenuEdit = <ToolbarButtonMenu create {...this.props} label="ui-marccat.search.record.edit" style={rightButton} />;
-    const search = <ToolbarMenu icon={['search']}{...this.props} />;
-
-    let marcJSONRecords = [];
-    if (this.props.headings && this.props.headings.length > 0) {
-      marcJSONRecords = remapForResultList(this.props.headings);
-    }
-
-    const columnMapper = {
-      'resultView': '',
-      '001': 'Id. Number (001)',
-      '245': 'Title (245)',
-      'uniformTitle': 'Uniform Title (130, 240)',
-      'subject': 'Subject (6xx)',
-      'date1': 'Date 1',
-      'date2': 'Date 2'
-    };
-
-    const resultsFormatter = {
-      resultView: x => (
-        <AppIcon
-          className={x.recordView === 1 ? css.bibliographic : css.authority}
-          size="small"
-        />
-      ),
-      name: x => (
-        <div>
-          { x['100'] && x['100'] }
-          { x['110'] && x['110'] }
-          { x['111'] && x['111'] }
-        </div>
-      ),
-      uniformTitle: x => (
-        <div>
-          { x['130'] && x['130'] }
-          { x['240'] && x['240'] }
-        </div>
-      ),
-      date1: x => (
-        <div>
-          {getFieldPosition(x['008'], 7, 11)}
-        </div>
-      ),
-      date2: x => (
-        <div>
-          {getFieldPosition(x['008'], 11, 14)}
-        </div>
-      ),
-      subject: x => (
-        <div>
-          { x['600'] && x['600'] }
-          { x['610'] && x['610'] }
-          { x['611'] && x['611'] }
-          { x['630'] && x['630'] }
-          { x['647'] && x['647'] }
-          { x['648'] && x['648'] }
-          { x['650'] && x['650'] }
-          { x['651'] && x['651'] }
-          { x['653'] && x['653'] }
-          { x['654'] && x['654'] }
-          { x['655'] && x['655'] }
-          { x['651'] && x['651'] }
-          { x['653'] && x['653'] }
-          { x['654'] && x['654'] }
-          { x['655'] && x['655'] }
-          { x['656'] && x['656'] }
-          { x['657'] && x['657'] }
-          { x['658'] && x['658'] }
-          { x['662'] && x['662'] }
-        </div>
-      )
-    };
+    const rightMenu = <ToolbarButtonMenu create {...this.props} label="ui-marccat.search.record.new.keyboard" />;
+    const rightMenuEdit = <ToolbarButtonMenu create {...this.props} label="ui-marccat.search.record.edit" />;
+    const leftMenu = <ToolbarMenu badgeCount={headings ? headings.length : undefined} {...this.props} icon={['search']} />;
+    const marcJSONRecords = (headings && headings.length > 0) ? remapForResultList(headings) : [];
 
     return (
       <Paneset static>
         <Pane
+          defaultWidth="fill"
           paneTitle={<FormattedMessage id="ui-marccat.search.record" />}
-          paneSub={(this.props.fetching) ? 'Searching....' : (this.props.headings) ? this.props.headings.length + ' Results Found' : 'No Result found'}
+          paneSub={(fetching) ? 'Searching....' : (headings) ? headings.length + ' Results Found' : 'No Result found'}
           appIcon={{ app: C.META.ICON_TITLE }}
-          firstMenu={search}
-          lastMenu={rightMenu}
           actionMenuItems={actionMenuItems}
+          firstMenu={leftMenu}
+          lastMenu={rightMenu}
         >
-          {!this.props.headings && !this.props.fetching &&
+          {
+            !headings && !fetching &&
             <EmptyMessage {...this.props} />
           }
-          {(this.props.fetching) ?
-            <DotLoader {...this.props} /> :
-            <MultiColumnList
-              defaultWidth="fill"
-              isEmptyMessage=""
-              columnWidths={{ 'resultView': '5%', '001': '10%', '245': '35%', 'name': '15%', 'uniformTitle': '10%', 'subject': '15%', 'date1': '5%', 'date2': '5%' }}
-              onRowClick={this.handleDeatils}
-              contentData={marcJSONRecords}
-              formatter={resultsFormatter}
-              columnMapping={columnMapper}
-              visibleColumns={[
-                'resultView',
-                '001',
-                '245',
-                'name',
-                'uniformTitle',
-                'subject',
-                'date1',
-                'date2'
-              ]}
-            />}
+          {
+            (this.props.fetching) ?
+              <Icon icon="spinner-ellipsis" /> :
+              <MultiColumnList
+                defaultWidth="fill"
+                isEmptyMessage=""
+                columnWidths={
+                  { 'resultView': '5%',
+                    '001': '12%',
+                    '245': '25%',
+                    'name': '15%',
+                    'uniformTitle': '10%',
+                    'subject': '15%',
+                    'date1': '5%',
+                    'date2': '5%',
+                    'format': '10%' }
+                }
+                onRowClick={this.handleDeatils}
+                contentData={marcJSONRecords}
+                formatter={resultsFormatter}
+                columnMapping={columnMapper}
+                visibleColumns={[
+                  'resultView',
+                  '001',
+                  '245',
+                  'name',
+                  'uniformTitle',
+                  'subject',
+                  'date1',
+                  'date2',
+                  'format'
+                ]}
+              />
+          }
         </Pane>
-        {detailPanelIsVisible &&
+        {
+          detailPanelIsVisible &&
           <Pane
             id="pane-details"
-            defaultWidth="30%"
+            defaultWidth="35%"
             paneTitle={<FormattedMessage id="ui-marccat.search.record.preview" />}
-            paneSub={(this.props.headings) ? this.props.headings.length : 'No results'}
+            paneSub={C.EMPTY_MESSAGE}
             appIcon={{ app: C.META.ICON_TITLE }}
             dismissible
             onClose={() => this.setState({ detailPanelIsVisible: false })}
             actionMenuItems={actionMenuItems}
             lastMenu={rightMenuEdit}
           >
-            {(this.props.fetchingDetail) ? <DotLoader {...this.props} /> : <RowDetails {...this.props} />}
-          </Pane>}
+            {
+              (fetchingDetail) ?
+                <Icon icon="spinner-ellipsis" /> :
+                <RecordDetails {...this.props} />
+            }
+          </Pane>
+        }
       </Paneset>
     );
   }
