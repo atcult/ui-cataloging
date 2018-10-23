@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable no-alert */
 import React from 'react';
 import SearchField from '@folio/stripes-components/lib/SearchField';
 import { AccordionSet, Accordion, FilterAccordionHeader } from '@folio/stripes-components';

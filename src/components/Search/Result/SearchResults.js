@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import MultiColumnList from '@folio/stripes-components/lib/MultiColumnList';
 import { connect } from 'react-redux';
@@ -8,7 +9,7 @@ import Paneset from '@folio/stripes-components/lib/Paneset';
 import * as C from '../../../utils/Constant';
 import { ActionTypes } from '../../../redux/actions';
 import { Props } from '../../../core';
-import { actionMenuItem, ToolbarButtonMenu, ToolbarMenu, EmptyMessage } from '../../lib';
+import { actionMenuItem, ToolbarButtonMenu, ToolbarMenu, EmptyMessage } from '../../Lib';
 import { remapForResultList } from '../../../utils/Mapper';
 import { resultsFormatter, columnMapper } from '../../../utils/Formatter';
 import RecordDetails from './RecordDetails';
@@ -30,6 +31,7 @@ export class SearchResults extends React.Component<P, {}> {
     };
     this.handleDeatils = this.handleDeatils.bind(this);
     this.handleCount = this.handleCount.bind(this);
+    this.handleMoreData = this.handleMoreData.bind(this);
   }
 
   handleDeatils = (e, meta) => {
@@ -41,12 +43,16 @@ export class SearchResults extends React.Component<P, {}> {
     });
   };
 
+  handleMoreData = () => {
+    console.log('get More data now');
+  }
+
   handleCount = (recordArray) => {
     recordArray.forEarch(singleRecord => {
       if (singleRecord.recordView === 1) {
         recordArray.count = '';
       } else {
-        //TO-DO when Carmen will release her function
+        // TO-DO when Carmen will release her function
       }
     });
   };
@@ -57,13 +63,13 @@ export class SearchResults extends React.Component<P, {}> {
     const actionMenuItems = actionMenuItem(['ui-marccat.indexes.title', 'ui-marccat.diacritic.title']);
     const rightMenu = <ToolbarButtonMenu create {...this.props} label="ui-marccat.search.record.new.keyboard" />;
     const rightMenuEdit = <ToolbarButtonMenu create {...this.props} label="ui-marccat.search.record.edit" />;
-    const leftMenu = <ToolbarMenu badgeCount={headings ? headings.length : undefined} {...this.props} icon={['search']} />;    
+    const leftMenu = <ToolbarMenu badgeCount={headings ? headings.length : undefined} {...this.props} icon={['search']} />;
     let mergedRecord = [];
     if (authHeadings && authHeadings.length > 0) {
       mergedRecord = [...mergedRecord, ...authHeadings];
     }
     if (headings && headings.length > 0) {
-      mergedRecord = [...mergedRecord, ...headings]
+      mergedRecord = [...mergedRecord, ...headings];
     }
     const marcJSONRecords = (mergedRecord && mergedRecord.length > 0) ? remapForResultList(mergedRecord) : [];
 
@@ -89,6 +95,7 @@ export class SearchResults extends React.Component<P, {}> {
               <MultiColumnList
                 defaultWidth="fill"
                 isEmptyMessage=""
+                onNeedMoreData={this.handleMoreData}
                 columnWidths={
                   { 'resultView': '5%',
                     '001': '12%',
