@@ -4,7 +4,7 @@ import { EMPTY_MESSAGE } from '../../utils/Constant';
 const isLoading = false;
 const isLoadingDetail = false;
 const isLoadingAssociatedBibRecords = false;
-let query = EMPTY_MESSAGE;
+const query = EMPTY_MESSAGE;
 
 export function countDocReducer(state = { isLoading }, action) {
   switch (action.type) {
