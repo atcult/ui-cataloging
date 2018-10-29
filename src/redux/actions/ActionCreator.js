@@ -41,12 +41,16 @@ export const fetchRequestedCountDoc = (isLoading) => ({
   payload: isLoading
 });
 export const fetchSearchEngineRecords = (records) => ({
-  type: ActionTypes.RECORD_SUCCESS,
+  type: ActionTypes.FETCH_REQUESTED,
   payload: records
 });
 export const fetchSearchAuthEngineRecords = (records) => ({
   type: ActionTypes.RECORD_AUTH_SUCCESS,
   payload: records
+});
+export const fetchSuccesss = (message) => ({
+  type: ActionTypes.SUCCESS,
+  payload: message
 });
 export const fetchFailure = (message) => ({
   type: ActionTypes.REJECT,

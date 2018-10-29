@@ -158,7 +158,7 @@ class SearchPanel extends React.Component<P, {}> {
             </Row>
           </form>
         </Accordion>
-        <FiltersContainer {...this.props} />
+        <FiltersContainer {...this.props} onclikk={this.handleKeyDown} />
       </AccordionSet>
     );
   }

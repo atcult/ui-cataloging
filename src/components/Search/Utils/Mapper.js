@@ -56,7 +56,7 @@ const remapForAssociatedBibList = i => {
 const getTag245 = (bigStringArray) => {
   let tag245 = '';
   bigStringArray.map(item => {
-    if (item.substring(0, 4).trim() === '245') {
+    if (item.substring(0, 4).trim() === '245 title') {
       tag245 = item.substring(0, 4);
     }
     return tag245;
@@ -67,7 +67,7 @@ const getTag245 = (bigStringArray) => {
 const getTitle245 = (bigStringArray) => {
   let titleTag245 = '';
   bigStringArray.map(item => {
-    if (item.substring(0, 4).trim() === '245') {
+    if (item.substring(0, 4).trim() === '245 title') {
       titleTag245 = item.substring(4);
     }
     return titleTag245;

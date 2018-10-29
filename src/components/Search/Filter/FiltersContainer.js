@@ -5,7 +5,9 @@ import type { Props } from '../../../core';
 
 import styles from './FiltersContainer.css';
 
-type P = Props & {}
+type P = Props & {
+  onclikk: () => void;
+}
 export default class FiltersContainer extends React.Component<P, {}> {
   constructor(props) {
     super(props);
@@ -39,6 +41,9 @@ export default class FiltersContainer extends React.Component<P, {}> {
     this.state = {
       filters: initialFilterState(this.config, null),
     };
+  }
+
+  componentDidUpdate() {
   }
 
   onChangeFilter = (e) => {

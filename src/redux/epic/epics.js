@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Observable } from 'rxjs';
 import { of as of$ } from 'rxjs/observable/of';
+import { combineEpics } from 'redux-observable';
 import { concat as concat$ } from 'rxjs/observable/concat';
 import { ajax } from 'rxjs/observable/dom/ajax';
 import { ActionTypes } from '../actions/Actions';
@@ -28,7 +29,9 @@ export const searchAuthEpic = (action$, store) =>
           .map(record => marccatActions.fetchSearchAuthEngineRecords(record.docs))
           .catch(e => of$(marccatActions.fetchFailure(e))),
       ));
-// TOBE REMOVED
+
+export const searchEpics = combineEpics(searchEpic, searchAuthEpic);
+
 export const searchDetailEpic = (action$, store) =>
   action$.ofType(ActionTypes.DETAILS)
     .switchMap((d) =>
@@ -72,3 +75,17 @@ export function fetchScanBrowsingRecords(action$) {
     })
     .map(records => marccatActions.fetchScanBrowsingRecords(records));
 }
+
+export const searchEpjjic = (action$) => {
+  return action$.ofType(ActionTypes.SEARCH)
+    .switchMap(d => {
+      return Observable.merge(
+        ajax
+          .getJSON(buildUrl(ENDPOINT.SEARCH_URL_JSON, `lang=ita&view=1&ml=170&q=${d.query}&from=1&to=30&dpo=1`), ENDPOINT.HEADERS)
+          .map(record => marccatActions.fetchSearchEngineRecords(record.docs)),
+        ajax
+          .getJSON(buildUrl(ENDPOINT.SEARCH_URL_JSON, `lang=eng&view=-1&ml=170&q=${d.query}&from=1&to=30&dpo=1`), ENDPOINT.HEADERS)
+          .map(record => marccatActions.fetchSearchAuthEngineRecords(record.docs))
+      );
+    });
+};

@@ -63,7 +63,7 @@ export class SearchResults extends React.Component<P, {}> {
         <Pane
           defaultWidth="fill"
           paneTitle={<FormattedMessage id="ui-marccat.search.record" />}
-          paneSub={(fetching || authFetching) ? 'Searching....' : (headings) ? headings.length + ' Results Found' : 'No Result found'}
+          paneSub={(fetching && authFetching) ? 'Searching....' : (headings || authHeadings) ? mergedRecord.length + ' Results Found' : 'No Result found'}
           appIcon={{ app: C.META.ICON_TITLE }}
           actionMenuItems={actionMenuItems}
           firstMenu={leftMenu}

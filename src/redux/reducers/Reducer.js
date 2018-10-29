@@ -1,8 +1,10 @@
 import { ActionTypes } from '../actions/Actions';
+import { EMPTY_MESSAGE } from '../../utils/Constant';
 
 const isLoading = false;
 const isLoadingDetail = false;
 const isLoadingAssociatedBibRecords = false;
+let query = EMPTY_MESSAGE;
 
 export function countDocReducer(state = { isLoading }, action) {
   switch (action.type) {
@@ -34,7 +36,8 @@ export function searchEngineReducer(state = { isLoading }, action) {
   case ActionTypes.SEARCH:
     return {
       ...state,
-      isLoading: false
+      isLoading: false,
+      query: action.query
     };
   case ActionTypes.FETCH_REQUESTED:
     return {
@@ -147,12 +150,13 @@ export function scanBrowsingReducer(state = { isLoading }, action) {
   }
 }
 
-export function filterReducer(state = { isLoading }, action) {
+export function filterReducer(state = { }, action) {
   switch (action.type) {
   case ActionTypes.FILTERS:
     return {
       ...state,
       filters: action.payload,
+      query
     };
   default:
     return state;
