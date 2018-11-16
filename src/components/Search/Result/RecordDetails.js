@@ -5,31 +5,30 @@ import { AccordionSet, FilterAccordionHeader, Accordion } from '@folio/stripes-c
 import { Row, Col } from 'react-flexbox-grid';
 import InventoryPluggableBtn from '../Plugin/Inventory';
 import type { Props } from '../../../core';
-import style from '../Style/Search.css';
-import { getTag245, getTitle245, getTag100, getTitle100 } from '../Utils/Mapper';
+import { getTag245, getTitle245 } from '../Utils/Mapper';
 import AssociatedBib from './AssociatedBib';
-import { EMPTY_MESSAGE } from '../../../utils/Constant';
+
+import style from '../Style/Search.css';
 
 type P = Props & {
   items: Array<any>,
 }
 
 function RecordDetails({ translate, ...props }: P) {
-  const recordDetails = props.items.replace('LEADER', '000');
+  const recordDetails = props.items.replace('LEADER', '   ');
   const recordDetailsArray = recordDetails.split('\n');
-  const tag245 = getTag245(recordDetailsArray);
-  const title245 = getTitle245(recordDetailsArray);
   return (
     <AccordionSet>
       <Accordion
+        {...props.rest}
         separator={false}
         header={FilterAccordionHeader}
         label={props.checkDetailsInRow !== props.checkDetailsBibRec ? translate({ id: 'ui-marccat.search.details.bibliographic' }) : translate({ id: 'ui-marccat.search.details.authority' })}
       >
         <div className={style.withSpace}>
           <KeyValue
-            label={tag245 === EMPTY_MESSAGE ? getTag100(recordDetailsArray) : tag245 + 'Title'}
-            value={title245 === EMPTY_MESSAGE ? getTitle100(recordDetailsArray) : title245}
+            label={getTag245(recordDetailsArray)}
+            value={getTitle245(recordDetailsArray)}
           />
           {recordDetailsArray.map((item, i) =>
             <Row key={i}>
@@ -53,9 +52,8 @@ function RecordDetails({ translate, ...props }: P) {
 }
 
 export default (connect(
-  ({ marccat: { details, scan, associatedRecords } }) => ({
+  ({ marccat: { details, associatedRecords } }) => ({
     items: details.records,
-    headings: scan.records,
     checkDetailsInRow: details.recordType,
     checkDetailsBibRec: associatedRecords.recordType
   })

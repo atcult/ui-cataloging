@@ -5,8 +5,7 @@ import { concat as concat$ } from 'rxjs/observable/concat';
 import { ajax } from 'rxjs/observable/dom/ajax';
 import { ActionTypes } from '../actions/Actions';
 import * as marccatActions from '../actions';
-import { buildUrl } from '../helpers';
-import { ENDPOINT } from '../../utils/Constant';
+import { ENDPOINT, buildUrl } from '../../utils/Constant';
 import { fetchFailure } from '../actions/ActionCreator';
 
 export const searchEpic = (action$, store) =>
@@ -48,7 +47,7 @@ export const searchAssociatedBibRecords = (action$, store) =>
         of$(marccatActions.fetchRequestedAssociatedBibRecords(true)),
         ajax
           .getJSON(buildUrl(ENDPOINT.SEARCH_URL_JSON, `lang=ita&view=1&ml=170&q=${d.query}&from=1&to=10&dpo=1`), ENDPOINT.HEADERS)
-          .map(record => marccatActions.fetchAssociatedBibRecords(record.docs, d.recordType, d.count))
+          .map(record => marccatActions.fetchAssociatedBibRecords(record.docs, d.recordType))
           .catch(e => of$(marccatActions.fetchFailure(e))),
       ));
 

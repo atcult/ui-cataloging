@@ -22,7 +22,7 @@ function AssociatedBib({ ...props }: P) {
       {...props.rest}
       separator={false}
       header={FilterAccordionHeader}
-      label={'(' + props.bibRecords.length + ') Associated bibliographic records'}
+      label="Associated bibliographic records"
     >
       {resultRemapped &&
       <MultiColumnList
@@ -55,7 +55,6 @@ function AssociatedBib({ ...props }: P) {
 export default (connect(
   ({ marccat: { associatedRecords } }) => ({
     checkRecordType: associatedRecords.recordType,
-    bibRecords: associatedRecords.records,
-    associatedBibsCount: associatedRecords.count
+    bibRecords: associatedRecords.records
   })
 )(AssociatedBib));
